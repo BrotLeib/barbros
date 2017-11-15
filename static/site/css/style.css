@@ -1,0 +1,28 @@
+body,
+html{
+    height: 100%;
+}
+
+
+#navbarSupportedContent{
+    display: flex;
+    justify-content: center;
+}
+
+#navbar-base{
+    z-index: +1;
+    /* transform: translate(-50%, 0%); */
+    text-align: center;
+}
+
+.center ul{
+    margin: 0 auto;
+}
+
+.center ul a {
+    color: black;
+    font-size: 1.25rem;
+}
+.nav-item a:hover {
+    text-decoration: underline;
+}

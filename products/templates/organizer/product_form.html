@@ -1,0 +1,13 @@
+{% extends partent_template|default:'site/base.html' %}
+
+{% block title %}
+{{ block.super }} - Product
+{% endblock %}
+
+{% block content %}
+    <form action="{% url 'product_create' %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Registrieren</button>
+    </form>
+{% endblock %}

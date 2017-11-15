@@ -1,0 +1,130 @@
+{% extends parent_template|default:"profiles/base_profiles.html" %}
+
+{% load static %}
+
+{% block head_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'profiles\css\style.css' %}">
+{% endblock %}
+
+{% block title %}
+    {{ block.super }} -
+    {{ profile.user.get_full_name }}'s Profile
+{% endblock %}
+
+{% block content %}
+    <!-- personal section -->
+    <section id="profile-base">
+        <div class="container">
+
+                <div class="profile-overview">
+                    <div class="row">
+                        <div class="col-sm-4 profile-img-box">
+                            <img src="{{ profile.img.url }}.png" alt="" class="rounded-circle" id="profile_img">
+                        </div>
+                        <div class="col-sm-8 short-data">
+                            <div class="row">
+                                div.col
+                            </div>
+
+                        </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="card text-center profile-card">
+                    <div class="card-header profile-card-header">
+                        {{ profile.user.get_short_name|title }}s Profil
+                    </div>
+                    <div class="card-block">
+                        <h4 class="card-title">Special title treatment</h4>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <div class="profile-edit">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <a href="{{ profile.get_update_url }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Text bearbeiten</a>
+                            </div>
+                            <div class="col-sm-4">
+                                <a href=""><i class="fa fa-picture-o" aria-hidden="true"></i> Profilbild ändern</a>
+                            </div>
+                            <div class="col-sm-4">
+                                <a href=""><i class="fa fa-user-o" aria-hidden="true"></i> Profil Bearbeiten</a>
+                            </div>
+                        </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+            <p><i class="fa fa-chevron-circle-down" aria-hidden="true"></i> <br></nr>Zu deinen Produkten</p>
+        </div>
+        </div>
+
+    </section>
+
+    {% comment %}
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="{{ profile.get_update_url }}">Profil bearbeiten</a>
+                    <a class="dropdown-item" href="{% url 'dj-auth:pw_change' %}">Passwort ändern</a>
+                    <a class="dropdown-item" href="{% url 'dj-auth:disable' %}">Konto deaktivieren</a>
+                </div>
+
+            <!-- profile img -->
+            <div class="container justify-content-center" style="text-align: center">
+                <img src="{{ profile.img.url }}.png" alt="" class="rounded-circle" id="profile_img">
+                <h2>{{ profile.user.get_full_name }}</h2>
+            </div>
+
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-sm-5 card bg-primary text-center">
+                        <blockquote class="blockquote mb-0">
+                            {% if profile.about %}
+                                <p>"{{ profile.about|linebreaks }}"</p>
+                            {% else %}
+                                <p>Schreib doch etwas über dich! Stößt jemand auf einen
+                                    Deiner Charlees wird ihm dieser Text angezeigt</p>
+                            {% endif %}
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+            {% endcomment %}
+
+
+            <section id="product-list">
+                {% if profile.product_set %}
+                    <div class="container product-wrapper">
+                        <h1>Deine Produkte</h1>
+                        {% for product in profile.product_set.all %}
+                            <div class="container">
+                                <div class="cover">
+                                    <div class="row">
+                                        {% if product.type == 'BK' %}
+                                            <div class="col-sm-2"><i class="fa fa-bicycle fa-4x" aria-hidden="true"></i>
+                                            </div>
+                                        {% elif product.type == 'EL' %}
+                                            <div class="col-sm-2">#</div>
+                                        {% elif product.type == 'CA' %}
+                                            <div class="col-sm-2">#</div>
+                                        {% else %}
+                                            <div class="col-sm-2"></div>
+                                        {% endif %}
+                                        <div class="col-sm-7">
+                                            {{ product.key }}
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <p>actions</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="add-btn">
+                            <form action="{% url 'product_create' %}">
+                                <button type="submit" class="btn btn-info add-btn-btn">Neues Produkt registrieren</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endif %}
+            </section>
+{% endblock %}

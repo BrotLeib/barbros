@@ -1,0 +1,97 @@
+.profile-overview {
+    border: 1px solid lightgray;
+    width: 90%;
+    margin: 5% auto 0;
+    border-radius: 1.4rem;
+
+}
+
+.profile-img-box {
+    border-right: 1px solid lightgray;
+}
+
+#profile-base {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background-color: lightgray;
+}
+
+#profile-base .container {
+    height: 80%;
+    display: block;
+    border: solid 1px lightgray;
+    border-radius: 2.5rem;
+    transform: translate(0%, -10%);
+    background-color: white;
+
+}
+
+.profile-card {
+    margin: 5% auto;
+    width: 90%;
+    border-radius: 1.5rem;
+}
+
+.profile-edit {
+    width: 50%;
+    margin: 0 auto;
+    color: black;
+}
+.profile-edit a {
+    color: black;
+    font-size: 0.8rem;
+}
+
+.profile-card-header {
+    background-color: #17a2b8;
+    border-radius: 1.5rem 1.5rem 0 0 !important;
+}
+
+#product-list{
+    height: 100%;
+    width: 100%;
+    background-color: #f2f2f2;
+}
+
+#product-list h1 {
+    margin: 20px;
+    font-size: 1.5rem;
+    color: #17a2b8;
+}
+
+#profile_img{
+    height: 150px;
+    width: 150px;
+    position: relative;
+    z-index: +1;
+    border: solid lightgray 0.5px;
+    display: block;
+    margin: 0 auto;
+}
+
+.cover {
+    padding: 10px;
+    border: solid 1px lightgray;
+    margin-bottom: 1rem;
+    border-radius: 1.5rem;
+}
+
+.cover:hover {
+    background-color: lightgray;
+}
+
+.product-wrapper {
+    text-align: left;
+    padding-top: 3rem;
+}
+
+.add-btn {
+    text-align: right;
+}
+
+.add-btn-btn {
+    border-radius: 2rem;
+    transform: translate(-10%, 0%);
+}
