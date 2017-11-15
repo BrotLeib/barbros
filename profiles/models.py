@@ -14,8 +14,7 @@ class ProfileManager(models.Manager):
 
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
-    name = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=30, unique=True)
+    slug = models.SlugField(max_length=30, unique=True, blank=True)
     about = models.TextField()
     joined = models.DateTimeField("Date Joined", auto_now_add=True)
     img = models.ImageField(upload_to='profiles/profile_pictures',
