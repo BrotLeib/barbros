@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.utils.text import slugify
 
 from .models import Product
-##########################################################################
+
 
 class SearchForm(forms.Form):
     key = forms.CharField(max_length=6, min_length=6)
