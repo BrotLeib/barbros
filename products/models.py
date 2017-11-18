@@ -4,7 +4,6 @@ from django.db import models
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.utils.text import slugify
-##########################################################################
 
 
 class Product(models.Model):

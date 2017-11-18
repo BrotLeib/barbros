@@ -9,9 +9,6 @@ from rest_framework import generics, permissions
 from rest_framework.response import Response
 
 
-##########################################################################
-
-
 class PublicProductDetail(APIView):
 
     def get(self, request, key, format=None):
