@@ -21,21 +21,33 @@ class Command(BaseCommand):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.User = get_user_model()
-        self.name_field = (
-            Profile._meta.get_field('name'))
+        self.first_name_field = (
+            get_user_model()._meta.get_field('first_name'))
+        self.last_name_field = (
+            get_user_model()._meta.get_field('last_name'))
         self.username_field = (
             self.User._meta.get_field(
                 self.User.USERNAME_FIELD))
 
     def execute(self, *args, **options):
+
+        # this method is not changed
+        # the stdin kwarg is used later to check
+        # if interactive mode is activated
+
         self.stdin = options.get(
             'stdin', sys.stdin)
         return super().execute(*args, **options)
 
     def add_arguments(self, parser):
         parser.add_argument(
-            '--{}'.format(self.name_field.name),
-            dest=self.name_field.name,
+            '--{}'.format(self.first_name_field.name),
+            dest=self.first_name_field.name,
+            default=None,
+            help='User profile name.')
+        parser.add_argument(
+            '--{}'.format(self.second_name_field.name),
+            dest=self.second_name_field.name,
             default=None,
             help='User profile name.')
         parser.add_argument(
@@ -224,8 +236,10 @@ class Command(BaseCommand):
                 .format('; '.join(e.messages)))
 
     def handle(self, **options):
-        name = options.pop(
-            self.name_field.name, None)
+        first_name = options.pop(
+            self.first_name_field.name, None)
+        second_name = options.pop(
+            self.second_name_field.name, None)
         username = options.pop(
             self.User.USERNAME_FIELD, None)
         password = None
@@ -233,10 +247,10 @@ class Command(BaseCommand):
         if not options['interactive']:
             name, username = (
                 self.handle_non_interactive(
-                    name, username, **options))
+                    first_name, username, **options))
         else:
             name, username, password = (
                 self.handle_interactive(
-                    name, username, **options))
+                    second_name, username, **options))
 
         self.create_user(name, username, password)
