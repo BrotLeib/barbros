@@ -10,9 +10,6 @@ from rest_framework import generics, permissions
 from rest_framework.response import Response
 
 
-####################################################################
-
-
 class ProfileView(APIView):
     """
     Retrieve profile Information - only GET is allowed on this view

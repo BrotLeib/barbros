@@ -10,5 +10,5 @@ class UserSerializer(serializers.ModelSerializer):
     products = serializers.PrimaryKeyRelatedField(many=True, queryset=Product.objects.all())
 
     class Meta:
-        model = user_model
+        model = get_user_model()
         fields = ('email', 'products')

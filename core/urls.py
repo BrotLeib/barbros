@@ -24,6 +24,7 @@ urlpatterns = [
     # user
 
     url(r'^users/$', user_views.UserList.as_view()),
+    url(r'^users/create/$', user_views.UserCreate.as_view()),
     url(r'^users/(?P<pk>[0-9]+)/$', user_views.UserDetail.as_view()),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api-token-auth/$', obtain_jwt_token),

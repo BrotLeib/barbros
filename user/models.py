@@ -5,14 +5,21 @@ from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager,
     PermissionsMixin)
 from django.db import models
+from django.utils.text import slugify
 
+from profiles.models import Profile
 from .validators import validate_name
+
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
     def _create_user(
             self, email, password, **kwargs):
+        '''
+        helper function for creating a user
+        creates a user and profile
+        '''
         email = self.normalize_email(email)
         is_staff = kwargs.pop('is_staff', False)
         is_superuser = kwargs.pop(
@@ -25,7 +32,13 @@ class UserManager(BaseUserManager):
             **kwargs)
         user.set_password(password)
         user.save(using=self._db)
+        self._create_profile(user)
         return user
+
+    def _create_profile(self, user):
+        slug = slugify('{}-{}'.format(user.first_name, user.last_name))
+        profile = Profile.objects.create(user=user, slug=slug)
+        return profile
 
     def create_user(
             self, email, password=None,
@@ -69,10 +82,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.profile.get_absolute_url()
 
     def get_full_name(self):
-        return self.profile.name
+        return "{} {}".format(self.first_name, self.last_name)
 
     def get_short_name(self):
-        return self.profile.name
+        return self.first_name
 
     def published_posts(self):
         return self.blog_posts.filter(
