@@ -102,7 +102,7 @@ class Command(BaseCommand):
         else:
             if halt:
                 raise CommandError(
-                    "That {} is already taken."
+                    "That {} is already takenn."
                     .format(
                         capfirst(
                             field.verbose_name)))
