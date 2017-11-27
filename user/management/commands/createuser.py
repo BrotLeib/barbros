@@ -23,7 +23,7 @@ class Command(BaseCommand):
         self.User = get_user_model()
         self.first_name_field = (
             get_user_model()._meta.get_field('first_name'))
-        self.last_name_field = (
+        self.second_name_field = (
             get_user_model()._meta.get_field('last_name'))
         self.username_field = (
             self.User._meta.get_field(
@@ -40,6 +40,9 @@ class Command(BaseCommand):
         return super().execute(*args, **options)
 
     def add_arguments(self, parser):
+
+        # django takes arguments defined here and passes to handle()
+
         parser.add_argument(
             '--{}'.format(self.first_name_field.name),
             dest=self.first_name_field.name,
@@ -111,19 +114,19 @@ class Command(BaseCommand):
         return None
 
     def handle_non_interactive(
-            self, name, username, **options):
+            self, first_name, second_name, username, **options):
         if not username:
             raise CommandError(
                 self.required_error.format(
                     self.User.USERNAME_FIELD))
-        if not name:
+        if not first_name or not second_name:
             raise CommandError(
                 self.required_error.format(
                     self.name_field.name))
         username = self.clean_value(
             self.username_field, username)
         name = self.clean_value(
-            self.name_field, name)
+            self.name_field, first_name)
         username = self.check_unique(
             self.User,
             self.username_field,
@@ -149,7 +152,7 @@ class Command(BaseCommand):
             return value
 
     def handle_interactive(
-            self, name, username, **options):
+            self, first_name, second_name, username, **options):
 
         password = None
 
@@ -174,14 +177,23 @@ class Command(BaseCommand):
                     self.username_field,
                     username,
                     halt=False)
-        if name is not None:
-            name = self.clean_value(
-                self.name_field, name, halt=False)
-            if name is not None:
+        if first_name is not None:
+            first_name = self.clean_value(
+                self.name_field, first_name, halt=False)
+            if first_name is not None:
                 name = self.check_unique(
                     Profile,
                     self.name_field,
-                    name,
+                    first_name,
+                    halt=False)
+        if second_name is not None:
+            second_name = self.clean_value(
+                self.name_field, second_name, halt=False)
+            if second_name is not None:
+                name = self.check_unique(
+                    Profile,
+                    self.name_field,
+                    second_name,
                     halt=False)
 
         try:
@@ -247,10 +259,10 @@ class Command(BaseCommand):
         if not options['interactive']:
             name, username = (
                 self.handle_non_interactive(
-                    first_name, username, **options))
+                    first_name, second_name, username, **options))
         else:
             name, username, password = (
                 self.handle_interactive(
-                    second_name, username, **options))
+                    first_name, second_name, username, **options))
 
-        self.create_user(name, username, password)
+        self.create_user(first_name, second_name, username, password)
