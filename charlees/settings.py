@@ -94,7 +94,7 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'charleesDB',
+        'NAME': 'kickerDB',
         'USER': 'postgres',
         'PASSWORD': 'Florian5275814',
         'HOST': '127.0.0.1',

@@ -19,6 +19,7 @@ class Command(BaseCommand):
         'You must use --{} with --noinput.')
 
     def __init__(self, *args, **kwargs):
+
         super().__init__(*args, **kwargs)
         self.User = get_user_model()
         self.first_name_field = (
@@ -122,18 +123,22 @@ class Command(BaseCommand):
         if not first_name or not second_name:
             raise CommandError(
                 self.required_error.format(
-                    self.name_field.name))
+                    self.first_name_field))
         username = self.clean_value(
             self.username_field, username)
-        name = self.clean_value(
-            self.name_field, first_name)
+        first_name = self.clean_value(
+            self.first_name_field, first_name)
+        second_name = self.clean_value(
+            self.second_name_field, second_name)
         username = self.check_unique(
             self.User,
             self.username_field,
             username)
-        name = self.check_unique(
-            Profile, self.name_field, name)
-        return (name, username)
+        first_name = self.check_unique(
+            get_user_model(), self.first_name_field, first_name)
+        second_name = self.check_unique(
+            get_user_model(), self.second_name_field, second_name)
+        return (first_name, second_name, username)
 
     def get_field_interactive(self, model, field):
         value = None
@@ -179,20 +184,20 @@ class Command(BaseCommand):
                     halt=False)
         if first_name is not None:
             first_name = self.clean_value(
-                self.name_field, first_name, halt=False)
+                self.first_name_field, first_name, halt=False)
             if first_name is not None:
-                name = self.check_unique(
-                    Profile,
-                    self.name_field,
+                first_name = self.check_unique(
+                    get_user_model(),
+                    self.first_name_field,
                     first_name,
                     halt=False)
         if second_name is not None:
             second_name = self.clean_value(
                 self.name_field, second_name, halt=False)
             if second_name is not None:
-                name = self.check_unique(
-                    Profile,
-                    self.name_field,
+                second_name = self.check_unique(
+                    get_user_model(),
+                    self.second_name_field,
                     second_name,
                     halt=False)
 
@@ -202,10 +207,15 @@ class Command(BaseCommand):
                     self.get_field_interactive(
                         self.User,
                         self.username_field))
-            if not name:
-                name = self.get_field_interactive(
-                    Profile,
-                    self.name_field)
+            if not first_name:
+                first_name = self.get_field_interactive(
+                    get_user_model(),
+                    self.first_name_field)
+
+            if not second_name:
+                second_name = self.get_field_interactive(
+                    get_user_model(),
+                    self.second_name_field)
 
             while password is None:
                 password = getpass.getpass()
@@ -226,7 +236,7 @@ class Command(BaseCommand):
                     password = None
                     continue
 
-            return (name, username, password)
+            return (first_name, second_name, username, password)
 
         except KeyboardInterrupt:
             self.stderr.write(
@@ -234,18 +244,14 @@ class Command(BaseCommand):
             sys.exit(1)
 
     def create_user(
-            self, name, username, password):
-        new_user = self.User.objects.create_user(
-            username, password)
+            self, first_name, second_name, username, password):
         try:
-            Profile.objects.create(
-                user=new_user,
-                name=name,
-                slug=slugify(name))
+            new_user = self.User.objects.create_user(
+                email=username, first_name=first_name,
+                last_name=second_name, password=password)
+            self.stdout.write('*** user created ***')
         except Exception as e:
-            raise CommandError(
-                "Could not create Profile:\n{}"
-                .format('; '.join(e.messages)))
+            self.stdout.write(Exception)
 
     def handle(self, **options):
         first_name = options.pop(
@@ -257,11 +263,11 @@ class Command(BaseCommand):
         password = None
 
         if not options['interactive']:
-            name, username = (
+            first_name, second_name, username = (
                 self.handle_non_interactive(
                     first_name, second_name, username, **options))
         else:
-            name, username, password = (
+            first_name, second_name, username, password = (
                 self.handle_interactive(
                     first_name, second_name, username, **options))
 
